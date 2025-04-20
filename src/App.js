@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // Import context providers
@@ -26,7 +26,6 @@ function App() {
             <Header />
             <main className="flex-grow">
               <Routes>
-                
                 <Route path="/" element={<Home />} />
                 <Route path="/activities" element={<Activities />} />
                 <Route path="/activities/:id" element={<ActivityDetail />} />
