@@ -4,7 +4,7 @@ import { useUser } from '../contexts/UserContext';
 
 const WhatsApp = () => {
   const { getTextSizeClass, getColorScheme } = useAccessibility();
-  const { currentUser, whatsappConnected, connectWhatsapp, disconnectWhatsapp, joinedGroups } = useUser();
+  const { whatsappConnected, connectWhatsapp, disconnectWhatsapp } = useUser();
   const colorScheme = getColorScheme();
   
   // State for phone number input

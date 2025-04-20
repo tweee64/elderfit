@@ -7,8 +7,8 @@ export const UserContext = createContext();
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-  // Mock user data for demo purposes
-  const [currentUser, setCurrentUser] = useState({
+  // Mock user data for demo purposes - using useState without destructuring the setter since we don't need it
+  const [currentUser] = useState({
     id: 1,
     name: "Lim Ah Meng",
     age: 68,
