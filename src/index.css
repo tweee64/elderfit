@@ -1,3 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles optimized for elderly users */
+@layer base {
+  html {
+    @apply text-lg;
+  }
+  
+  h1 {
+    @apply text-3xl font-bold mb-4;
+  }
+  
+  h2 {
+    @apply text-2xl font-semibold mb-3;
+  }
+  
+  h3 {
+    @apply text-xl font-medium mb-2;
+  }
+  
+  button, a.btn {
+    @apply py-3 px-6 rounded-lg text-lg font-medium transition-colors duration-200;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-elderly-blue text-white hover:bg-blue-700 active:bg-blue-800;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 hover:bg-gray-300 active:bg-gray-400;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6 mb-4;
+  }
+  
+  .input-large {
+    @apply text-lg p-4 rounded-lg border-2 w-full focus:ring-2 focus:ring-elderly-blue focus:border-elderly-blue;
+  }
+  
+  .high-contrast {
+    @apply bg-black text-white border-white;
+  }
+  
+  .elderly-accessible-tap {
+    @apply min-h-[3rem] min-w-[3rem] flex items-center justify-center;
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

@@ -1,0 +1,92 @@
+import React, { createContext, useState, useContext } from 'react';
+
+// Create context
+export const UserContext = createContext();
+
+// Custom hook to use the user context
+export const useUser = () => useContext(UserContext);
+
+export const UserProvider = ({ children }) => {
+  // Mock user data for demo purposes
+  const [currentUser, setCurrentUser] = useState({
+    id: 1,
+    name: "Lim Ah Meng",
+    age: 68,
+    location: {
+      address: "Toa Payoh, Singapore",
+      coordinates: { lat: 1.3329, lng: 103.8485 }
+    },
+    healthy365Data: {
+      dailySteps: 5432,
+      weeklyAverage: 4985,
+      healthConditions: ["Mild hypertension", "Type 2 diabetes"],
+      fitnessLevel: "Moderate"
+    },
+    interests: ["Gardening", "Tai Chi", "Reading", "Singing"]
+  });
+  
+  const [joinedGroups, setJoinedGroups] = useState([1, 3]); // Mock joined group IDs
+  const [savedActivities, setSavedActivities] = useState([2, 5]); // Mock saved activity IDs
+  const [whatsappConnected, setWhatsappConnected] = useState(false);
+  
+  // Functions to modify user data
+  const joinGroup = (groupId) => {
+    if (!joinedGroups.includes(groupId)) {
+      setJoinedGroups([...joinedGroups, groupId]);
+      return true;
+    }
+    return false;
+  };
+
+  const leaveGroup = (groupId) => {
+    if (joinedGroups.includes(groupId)) {
+      setJoinedGroups(joinedGroups.filter(id => id !== groupId));
+      return true;
+    }
+    return false;
+  };
+
+  const saveActivity = (activityId) => {
+    if (!savedActivities.includes(activityId)) {
+      setSavedActivities([...savedActivities, activityId]);
+      return true;
+    }
+    return false;
+  };
+
+  const removeActivity = (activityId) => {
+    if (savedActivities.includes(activityId)) {
+      setSavedActivities(savedActivities.filter(id => id !== activityId));
+      return true;
+    }
+    return false;
+  };
+
+  const connectWhatsapp = (phoneNumber) => {
+    // In a real app, this would involve an actual API call
+    setWhatsappConnected(true);
+    return true;
+  };
+
+  const disconnectWhatsapp = () => {
+    setWhatsappConnected(false);
+    return true;
+  };
+
+  return (
+    <UserContext.Provider value={{
+      currentUser,
+      joinedGroups,
+      savedActivities,
+      whatsappConnected,
+      joinGroup,
+      leaveGroup,
+      saveActivity,
+      removeActivity,
+      connectWhatsapp,
+      disconnectWhatsapp
+    }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
