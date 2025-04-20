@@ -17,39 +17,29 @@ import ActivityDetail from './pages/ActivityDetail';
 import Groups from './pages/Groups';
 import WhatsApp from './pages/WhatsApp';
 
-// function App() {
-//   return (
-//     <AccessibilityProvider>
-//       <UserProvider>
-//         <Router>
-//           <div className="flex flex-col min-h-screen">
-//             <Header />
-//             <main className="flex-grow">
-//               <Routes>
-                
-//                 <Route path="/" element={<Home />} />
-//                 <Route path="/activities" element={<Activities />} />
-//                 <Route path="/activities/:id" element={<ActivityDetail />} />
-//                 <Route path="/groups" element={<Groups />} />
-//                 <Route path="/whatsapp" element={<WhatsApp />} />
-//                 {/* Add more routes as needed */}
-//               </Routes>
-//             </main>
-//             <Footer />
-//           </div>
-//         </Router>
-//       </UserProvider>
-//     </AccessibilityProvider>
-//   );
-// }
-
-// export default App;
-
 function App() {
   return (
-    <div style={{ background: 'white', color: 'black', padding: '50px' }}>
-      <h1>Hello World</h1>
-    </div>
+    <AccessibilityProvider>
+      <UserProvider>
+        <Router>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+              <Routes>
+                
+                <Route path="/" element={<Home />} />
+                <Route path="/activities" element={<Activities />} />
+                <Route path="/activities/:id" element={<ActivityDetail />} />
+                <Route path="/groups" element={<Groups />} />
+                <Route path="/whatsapp" element={<WhatsApp />} />
+                {/* Add more routes as needed */}
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </Router>
+      </UserProvider>
+    </AccessibilityProvider>
   );
 }
 
