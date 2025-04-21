@@ -26,7 +26,7 @@ export const UserProvider = ({ children }) => {
   });
   
   const [joinedGroups, setJoinedGroups] = useState([1, 3]); // Mock joined group IDs
-  const [savedActivities, setSavedActivities] = useState([2, 5]); // Mock saved activity IDs
+  const [savedEvents, setSavedEvents] = useState([2, 5]); // Mock saved event IDs
   const [whatsappConnected, setWhatsappConnected] = useState(false);
   
   // Functions to modify user data
@@ -46,17 +46,17 @@ export const UserProvider = ({ children }) => {
     return false;
   };
 
-  const saveActivity = (activityId) => {
-    if (!savedActivities.includes(activityId)) {
-      setSavedActivities([...savedActivities, activityId]);
+  const saveEvent = (eventId) => {
+    if (!savedEvents.includes(eventId)) {
+      setSavedEvents([...savedEvents, eventId]);
       return true;
     }
     return false;
   };
 
-  const removeActivity = (activityId) => {
-    if (savedActivities.includes(activityId)) {
-      setSavedActivities(savedActivities.filter(id => id !== activityId));
+  const removeEvent = (eventId) => {
+    if (savedEvents.includes(eventId)) {
+      setSavedEvents(savedEvents.filter(id => id !== eventId));
       return true;
     }
     return false;
@@ -77,12 +77,12 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider value={{
       currentUser,
       joinedGroups,
-      savedActivities,
+      savedEvents,
       whatsappConnected,
       joinGroup,
       leaveGroup,
-      saveActivity,
-      removeActivity,
+      saveEvent,
+      removeEvent,
       connectWhatsapp,
       disconnectWhatsapp
     }}>

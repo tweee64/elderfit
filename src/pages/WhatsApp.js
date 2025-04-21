@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useUser } from '../contexts/UserContext';
+import Healthy365Nav from '../components/common/Healthy365Nav';
 
 const WhatsApp = () => {
   const { getTextSizeClass, getColorScheme } = useAccessibility();
@@ -14,7 +15,7 @@ const WhatsApp = () => {
   
   // State for notification preferences
   const [notificationPreferences, setNotificationPreferences] = useState({
-    activityReminders: true,
+    eventReminders: true,
     groupMessages: true,
     announcements: true,
     emergencyAlerts: true,
@@ -102,7 +103,7 @@ const WhatsApp = () => {
                       Your WhatsApp account is connected
                     </p>
                     <p className={`${colorScheme.text} ${getTextSizeClass()}`}>
-                      You will receive notifications about your activities and groups
+                      You will receive notifications about your events and groups
                     </p>
                   </div>
                 </div>
@@ -117,7 +118,7 @@ const WhatsApp = () => {
             ) : (
               <div>
                 <p className={`${colorScheme.text} mb-4 ${getTextSizeClass()}`}>
-                  Connect your WhatsApp account to receive notifications about your activities and communicate with your groups.
+                  Connect your WhatsApp account to receive notifications about your events and communicate with your groups.
                 </p>
                 
                 <form onSubmit={handleConnect} className="mb-4">
@@ -160,7 +161,7 @@ const WhatsApp = () => {
                     Privacy Notice
                   </h3>
                   <p className={`text-blue-800 ${getTextSizeClass()}`}>
-                    We'll only send you notifications related to your selected activities and groups. Your phone number is never shared with other users.
+                    We'll only send you notifications related to your selected events and groups. Your phone number is never shared with other users.
                   </p>
                 </div>
               </div>
@@ -182,17 +183,17 @@ const WhatsApp = () => {
                 <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50">
                   <div>
                     <p className={`${colorScheme.text} font-medium ${getTextSizeClass()}`}>
-                      Activity Reminders
+                      Event Reminders
                     </p>
                     <p className={`${colorScheme.text} text-sm ${getTextSizeClass()}`}>
-                      Receive reminders before your activities start
+                      Receive reminders before your events start
                     </p>
                   </div>
                   <label className="inline-flex items-center cursor-pointer">
                     <input 
                       type="checkbox" 
-                      checked={notificationPreferences.activityReminders}
-                      onChange={() => handlePreferenceChange('activityReminders')}
+                      checked={notificationPreferences.eventReminders}
+                      onChange={() => handlePreferenceChange('eventReminders')}
                       className="sr-only peer"
                     />
                     <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-elderly-blue rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-elderly-blue"></div>
@@ -205,7 +206,7 @@ const WhatsApp = () => {
                       Group Messages
                     </p>
                     <p className={`${colorScheme.text} text-sm ${getTextSizeClass()}`}>
-                      Receive messages from your activity groups
+                      Receive messages from your event groups
                     </p>
                   </div>
                   <label className="inline-flex items-center cursor-pointer">
@@ -225,7 +226,7 @@ const WhatsApp = () => {
                       Announcements
                     </p>
                     <p className={`${colorScheme.text} text-sm ${getTextSizeClass()}`}>
-                      Receive announcements about your activities
+                      Receive announcements about your events
                     </p>
                   </div>
                   <label className="inline-flex items-center cursor-pointer">
@@ -320,6 +321,12 @@ const WhatsApp = () => {
           )}
         </div>
       </section>
+      
+      {/* Add padding at the bottom to account for the navigation bar */}
+      <div className="h-20"></div>
+      
+      {/* Bottom Navigation */}
+      <Healthy365Nav />
     </div>
   );
 };

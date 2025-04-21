@@ -7,7 +7,7 @@ export const AccessibilityContext = createContext();
 export const useAccessibility = () => useContext(AccessibilityContext);
 
 export const AccessibilityProvider = ({ children }) => {
-  const [textSize, setTextSize] = useState('medium'); // small, medium, large, x-large
+  const [textSize, setTextSize] = useState('small'); // small, medium, large, x-large
   const [highContrast, setHighContrast] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
 

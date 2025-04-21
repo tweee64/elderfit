@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useUser } from '../contexts/UserContext';
+import Healthy365Nav from '../components/common/Healthy365Nav';
 import groups from '../data/groups';
-import activities from '../data/activities';
+import events from '../data/events';
 
 const Groups = () => {
   const { getTextSizeClass, getColorScheme } = useAccessibility();
@@ -28,9 +29,9 @@ const Groups = () => {
     return matchesFilter && matchesSearch;
   });
   
-  // Get activity details for a group
-  const getActivityForGroup = (activityId) => {
-    return activities.find(activity => activity.id === activityId);
+  // Get event details for a group
+  const getEventForGroup = (eventId) => {
+    return events.find(event => event.id === eventId);
   };
   
   // Handle joining or leaving a group
@@ -47,11 +48,11 @@ const Groups = () => {
       <section className="py-8">
         <div className="container mx-auto px-4">
           <h1 className={`${colorScheme.text} text-3xl font-bold mb-4 ${getTextSizeClass()}`}>
-            Activity Groups
+            Event Groups
           </h1>
           
           <p className={`${colorScheme.text} text-xl mb-8 ${getTextSizeClass()}`}>
-            Join activity groups to meet new friends and stay motivated together.
+            Join event groups to meet new friends and stay motivated together.
           </p>
           
           {/* Search and filters */}
@@ -85,7 +86,7 @@ const Groups = () => {
           <div className="space-y-6">
             {filteredGroups.length > 0 ? (
               filteredGroups.map(group => {
-                const relatedActivity = getActivityForGroup(group.associatedActivity);
+                const relatedEvent = getEventForGroup(group.associatedEvent);
                 const isJoined = joinedGroups.includes(group.id);
                 
                 return (
@@ -94,11 +95,11 @@ const Groups = () => {
                       <div className="w-full md:w-1/4 mb-4 md:mb-0 md:mr-6">
                         <div className={`h-40 rounded-lg flex items-center justify-center ${isJoined ? 'bg-elderly-blue bg-opacity-20' : 'bg-gray-200'}`}>
                           <span className="text-6xl">
-                            {relatedActivity?.category === "Exercise" ? "🧘‍♂️" :
-                             relatedActivity?.category === "Arts & Crafts" ? "🧶" :
-                             relatedActivity?.category === "Social" ? "🎤" :
-                             relatedActivity?.category === "Educational" ? "📱" :
-                             relatedActivity?.category === "Outdoors" ? "🌱" : "👥"}
+                            {relatedEvent?.category === "Exercise" ? "🧘‍♂️" :
+                             relatedEvent?.category === "Arts & Crafts" ? "🧶" :
+                             relatedEvent?.category === "Social" ? "🎤" :
+                             relatedEvent?.category === "Educational" ? "📱" :
+                             relatedEvent?.category === "Outdoors" ? "🌱" : "👥"}
                           </span>
                         </div>
                         
@@ -137,7 +138,7 @@ const Groups = () => {
                             Group Details
                           </h3>
                           <p className={`${colorScheme.text} mb-1 ${getTextSizeClass()}`}>
-                            <strong>Activity:</strong> {relatedActivity?.title || 'Unknown activity'}
+                            <strong>Event:</strong> {relatedEvent?.title || 'Unknown event'}
                           </p>
                           <p className={`${colorScheme.text} mb-1 ${getTextSizeClass()}`}>
                             <strong>Location:</strong> {group.location.name}
@@ -207,6 +208,12 @@ const Groups = () => {
           </div>
         </div>
       </section>
+      
+      {/* Add padding at the bottom to account for the navigation bar */}
+      <div className="h-20"></div>
+      
+      {/* Bottom Navigation */}
+      <Healthy365Nav />
     </div>
   );
 };

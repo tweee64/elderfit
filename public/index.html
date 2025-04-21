@@ -12,6 +12,31 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
+    <!-- SF Pro for non-macOS users -->
+    <style>
+      /* SF Pro font styles for non-macOS devices */
+      @font-face {
+        font-family: 'SF Pro Display';
+        font-weight: 400;
+        src: local('SF Pro Display Regular'), url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'SF Pro Display';
+        font-weight: 500;
+        src: local('SF Pro Display Medium'), url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-medium-webfont.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'SF Pro Display';
+        font-weight: 600;
+        src: local('SF Pro Display Semibold'), url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-semibold-webfont.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'SF Pro Display';
+        font-weight: 700;
+        src: local('SF Pro Display Bold'), url('https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff2') format('woff2');
+      }
+    </style>
+    
     <!-- GitHub Pages SPA routing script -->
     <script type="text/javascript">
       // Single Page Apps for GitHub Pages

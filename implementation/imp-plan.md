@@ -17,18 +17,18 @@ Based on the user stories provided and the specific requirements, here's a revis
 - Design senior-friendly UI with accessibility considerations
 - Implement dummy data for age, basic health information, daily steps, and fitness events
 
-## Phase 2: Activity Discovery Feature
-**Activity Data Management (1 week)**
-- Create models for community center activities
-- Add sample activities like crocheting classes, singing classes, and poetry workshops
+## Phase 2: Event Discovery Feature
+**Event Data Management (1 week)**
+- Create models for community center events
+- Add sample events like crocheting classes, singing classes, and poetry workshops
 - Implement Singapore-based location filtering
-- Develop simple categorization system for different activity types
+- Develop simple categorization system for different event types
 
-**Activity Search and Display (1 week)**
-- Implement activity listing with basic filtering capabilities
+**Event Search and Display (1 week)**
+- Implement event listing with basic filtering capabilities
 - Create distance-based filtering for Singapore locations
-- Design detailed activity view with all required information
-- Create mock activity recommendations based on hardcoded health data
+- Design detailed event view with all required information
+- Create mock event recommendations based on hardcoded health data
 - Implement senior-friendly UI elements (large text, high contrast)
 
 ## Phase 3: Group Participation Feature

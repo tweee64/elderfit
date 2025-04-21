@@ -11,22 +11,22 @@ const Home = () => {
   // Feature cards for the three main features
   const features = [
     {
-      title: "Discover Nearby Activities",
-      description: "Find activities happening near you that match your interests and abilities.",
+      title: "Discover Nearby Events",
+      description: "Find events happening near you that match your interests and abilities.",
       icon: "🔍",
-      link: "/activities",
+      link: "/events",
       color: "bg-elderly-blue"
     },
     {
       title: "Join Groups & Make Friends",
-      description: "Participate in group activities and make meaningful connections with others.",
+      description: "Participate in group events and make meaningful connections with others.",
       icon: "👥",
       link: "/groups",
       color: "bg-elderly-teal"
     },
     {
       title: "WhatsApp Announcements",
-      description: "Get timely updates about activities and groups through WhatsApp.",
+      description: "Get timely updates about events and groups through WhatsApp.",
       icon: "💬",
       link: "/whatsapp",
       color: "bg-elderly-orange"
@@ -106,15 +106,15 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Upcoming activities section */}
+      {/* Upcoming events section */}
       <section className="py-8 md:py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className={`${colorScheme.text} text-3xl font-bold ${getTextSizeClass()}`}>
-              Your Upcoming Activities
+              Your Upcoming Events
             </h2>
             <Link 
-              to="/activities" 
+              to="/events" 
               className={`${colorScheme.text} underline ${getTextSizeClass()}`}
             >
               View All →
