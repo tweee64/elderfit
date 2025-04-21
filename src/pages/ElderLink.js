@@ -215,13 +215,13 @@ const ElderLink = () => {
           
           {message.hasRSVPLink && (
             <div className="mt-2">
-              <a href="#" className="text-blue-500 font-bold">RSVP Now</a>
+              <button className="text-blue-500 font-bold bg-transparent border-0 p-0 cursor-pointer">RSVP Now</button>
             </div>
           )}
           
           {message.hasGroupLink && (
             <div className="mt-2">
-              <a href="#" className="text-blue-500 font-bold">Group Chat Link</a>
+              <button className="text-blue-500 font-bold bg-transparent border-0 p-0 cursor-pointer">Group Chat Link</button>
             </div>
           )}
           
