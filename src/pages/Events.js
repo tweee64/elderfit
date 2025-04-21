@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAccessibility } from '../contexts/AccessibilityContext';
+// import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useUser } from '../contexts/UserContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';
-import events from '../data/events'; // Import the events data
+// import events from '../data/events'; // Import the events data
 
 const Events = () => {
   const navigate = useNavigate();
-  const { getTextSizeClass } = useAccessibility();
+  // const { getTextSizeClass } = useAccessibility();
   const { savedEvents, saveEvent, removeEvent } = useUser();
   
   // State for filters
@@ -27,7 +27,7 @@ const Events = () => {
   });
   
   // Current date for dynamic date labels
-  const currentDate = new Date();
+  // const currentDate = new Date();
   const days = ['Today', 'Tomorrow', 'Wed, Apr 23', 'Thu, Apr 24', 'Fri, Apr 25'];
   
   // Sample events data - now integrating with events.js data
@@ -252,13 +252,13 @@ const Events = () => {
   };
   
   // Get all available programs for filter dropdown
-  const getAllPrograms = () => {
-    const programs = new Set();
-    Object.values(allEvents).flat().forEach(event => {
-      programs.add(event.program);
-    });
-    return Array.from(programs);
-  };
+  // const getAllPrograms = () => {
+  //   const programs = new Set();
+  //   Object.values(allEvents).flat().forEach(event => {
+  //     programs.add(event.program);
+  //   });
+  //   return Array.from(programs);
+  // };
   
   // Handle going back
   const handleBack = () => {
@@ -266,26 +266,26 @@ const Events = () => {
   };
   
   // Toggle filter selection
-  const toggleFilter = (type, value) => {
-    setFilters(prev => {
-      if (type === 'intensity') {
-        if (prev.intensity.includes(value)) {
-          return { ...prev, intensity: prev.intensity.filter(i => i !== value) };
-        } else {
-          return { ...prev, intensity: [...prev.intensity, value] };
-        }
-      } else if (type === 'virtual') {
-        return { ...prev, virtual: prev.virtual === value ? null : value };
-      } else if (type === 'program') {
-        if (prev.program.includes(value)) {
-          return { ...prev, program: prev.program.filter(p => p !== value) };
-        } else {
-          return { ...prev, program: [...prev.program, value] };
-        }
-      }
-      return prev;
-    });
-  };
+  // const toggleFilter = (type, value) => {
+  //   setFilters(prev => {
+  //     if (type === 'intensity') {
+  //       if (prev.intensity.includes(value)) {
+  //         return { ...prev, intensity: prev.intensity.filter(i => i !== value) };
+  //       } else {
+  //         return { ...prev, intensity: [...prev.intensity, value] };
+  //       }
+  //     } else if (type === 'virtual') {
+  //       return { ...prev, virtual: prev.virtual === value ? null : value };
+  //     } else if (type === 'program') {
+  //       if (prev.program.includes(value)) {
+  //         return { ...prev, program: prev.program.filter(p => p !== value) };
+  //       } else {
+  //         return { ...prev, program: [...prev.program, value] };
+  //       }
+  //     }
+  //     return prev;
+  //   });
+  // };
   
   // Reset all filters
   const resetFilters = () => {
@@ -304,18 +304,18 @@ const Events = () => {
   };
 
   // Get intensity display based on level (1-3)
-  const getIntensityDisplay = (level) => {
-    return (
-      <div className="flex items-center">
-        <span className="text-gray-600 mr-2 text-sm">Intensity:</span>
-        <div className="flex space-x-1">
-          <div className={`h-2 w-4 rounded ${level >= 1 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
-          <div className={`h-2 w-4 rounded ${level >= 2 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
-          <div className={`h-2 w-4 rounded ${level >= 3 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
-        </div>
-      </div>
-    );
-  };
+  // const getIntensityDisplay = (level) => {
+  //   return (
+  //     <div className="flex items-center">
+  //       <span className="text-gray-600 mr-2 text-sm">Intensity:</span>
+  //       <div className="flex space-x-1">
+  //         <div className={`h-2 w-4 rounded ${level >= 1 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
+  //         <div className={`h-2 w-4 rounded ${level >= 2 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
+  //         <div className={`h-2 w-4 rounded ${level >= 3 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   // Handle event click to navigate to detail page
   const handleEventClick = (eventId) => {

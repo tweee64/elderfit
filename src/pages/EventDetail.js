@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAccessibility } from '../contexts/AccessibilityContext';
+// import { useAccessibility } from '../contexts/AccessibilityContext';
 import events from '../data/events'; // Import events data
 
 const EventDetail = () => {
