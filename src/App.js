@@ -7,7 +7,6 @@ import { AccessibilityProvider } from './contexts/AccessibilityContext';
 import { UserProvider } from './contexts/UserContext';
 
 // Import pages
-import Home from './pages/Home';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import Groups from './pages/Groups';

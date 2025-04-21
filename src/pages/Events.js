@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useUser } from '../contexts/UserContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';

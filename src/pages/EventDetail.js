@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAccessibility } from '../contexts/AccessibilityContext';
-import { useUser } from '../contexts/UserContext';
 import events from '../data/events'; // Import events data
 
 const EventDetail = () => {
@@ -186,8 +185,7 @@ const EventDetail = () => {
     virtual: false,
   };
   
-  const { getTextSizeClass } = useAccessibility();
-  const { savedEvents, saveEvent, removeEvent } = useUser();
+  // const { getTextSizeClass } = useAccessibility();
   
   // Handle going back
   const handleBack = () => {

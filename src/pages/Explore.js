@@ -4,8 +4,7 @@ import { useAccessibility } from '../contexts/AccessibilityContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';
 
 const Explore = () => {
-  const { getTextSizeClass, getColorScheme } = useAccessibility();
-  const colorScheme = getColorScheme();
+  const { getTextSizeClass } = useAccessibility();
   const navigate = useNavigate();
 
   // Function to handle navigation to Events page
