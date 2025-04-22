@@ -1,15 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../contexts/UserContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';
 
 const Profile = () => {
-  const navigate = useNavigate();
-  const { currentUser } = useUser();
-  
-  const handleBack = () => {
-    navigate('/');
-  };
   
   const handleSettings = () => {
     // Navigate to settings page
