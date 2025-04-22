@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Healthy365Nav from '../components/common/Healthy365Nav';
-import Footer from '../components/common/Footer';
 import { useUser } from '../contexts/UserContext';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 
@@ -188,7 +187,7 @@ const AboutRewards = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="max-w-md mx-auto min-h-screen bg-gray-100">
       <Healthy365Nav />
       
       {/* Blue header to match Healthy365.js */}
@@ -232,19 +231,19 @@ const AboutRewards = () => {
         </div>
 
         {/* Content based on active tab */}
-        <div className="bg-gray-100 p-4 pb-28">
+        <div className="bg-gray-100 p-4 pb-20">
           {activeTab === 'wallet' && (
             <div className="space-y-4">
               {/* My Healthpoints Card */}
-              <div className="bg-white p-6 rounded-md shadow-sm">
-                <h2 className="text-xl text-gray-500 mb-4">My Healthpoints</h2>
-                <div className="flex items-center justify-center mb-6">
-                  <span className="text-5xl font-bold mr-2">1080</span>
-                  <svg className="w-10 h-10 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+              <div className="bg-white p-4 rounded-md shadow-sm">
+                <h2 className="text-lg text-gray-500 mb-4">My Healthpoints</h2>
+                <div className="flex items-center justify-center mb-4">
+                  <span className="text-4xl font-bold mr-2">1080</span>
+                  <svg className="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <hr className="my-4" />
+                <hr className="my-3" />
                 <button 
                   className="text-blue-500 font-medium"
                   onClick={() => navigate('/rewards/redeem')}
@@ -254,21 +253,21 @@ const AboutRewards = () => {
               </div>
 
               {/* Buddy Rewards Section */}
-              <div className="bg-white p-6 rounded-md shadow-sm">
+              <div className="bg-white p-4 rounded-md shadow-sm">
                 {/* Earth Month Theme Banner */}
                 <div className="bg-green-50 rounded-lg p-3 border border-green-200 mb-4 flex items-center">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-600" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z" clipRule="evenodd" />
                     </svg>
                   </div>
                   <div>
                     <h3 className="font-medium text-green-800">{stampsData.theme}</h3>
-                    <p className="text-sm text-green-700">{stampsData.themeDescription}</p>
+                    <p className="text-xs text-green-700">{stampsData.themeDescription}</p>
                   </div>
                 </div>
 
-                <h3 className={`text-xl font-medium text-gray-800 ${getTextSizeClass()}`}>
+                <h3 className={`text-lg font-medium text-gray-800 ${getTextSizeClass()}`}>
                   Your Buddy Rewards
                 </h3>
                 
@@ -307,8 +306,8 @@ const AboutRewards = () => {
                       <p className="text-gray-600">Total Points</p>
                       <p className="text-3xl font-bold text-yellow-700">{rewardsData.totalPoints}</p>
                     </div>
-                    <div className="w-14 h-14 bg-yellow-200 rounded-full flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-yellow-600" viewBox="0 0 20 20" fill="currentColor">
+                    <div className="w-12 h-12 bg-yellow-200 rounded-full flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-yellow-600" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
                       </svg>
@@ -319,7 +318,7 @@ const AboutRewards = () => {
                 {/* Points Breakdown */}
                 <div className="mt-4 flex">
                   {/* Regular Points */}
-                  <div className="flex-1 bg-gray-50 rounded-lg p-3 mr-3 border border-gray-100">
+                  <div className="flex-1 bg-gray-50 rounded-lg p-3 mr-2 border border-gray-100">
                     <p className="text-sm text-gray-600">Regular Points</p>
                     <p className="text-xl font-bold text-gray-700">{rewardsData.regularPoints}</p>
                   </div>
@@ -335,7 +334,7 @@ const AboutRewards = () => {
                 </div>
                 
                 {/* Recent Activities */}
-                <div className="mt-6">
+                <div className="mt-5">
                   <h4 className={`text-base font-medium text-gray-700 mb-3 ${getTextSizeClass()}`}>
                     Recent Activities
                   </h4>
@@ -393,7 +392,7 @@ const AboutRewards = () => {
                 </div>
                 
                 {/* Stamps Collection Section */}
-                <div className="mt-6 pt-4 border-t border-gray-200">
+                <div className="mt-5 pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className={`text-base font-medium text-gray-700 ${getTextSizeClass()}`}>
                       Activity Stamps
@@ -422,8 +421,8 @@ const AboutRewards = () => {
                       {stampsData.currentChallenge.collectedCount} of {stampsData.currentChallenge.totalStamps} stamps collected
                     </p>
                     
-                    {/* Pattern Completion Status */}
-                    <div className="mb-4 mt-2">
+                    {/* Pattern Completion Status - Simplified */}
+                    <div className="mb-3">
                       {stampsData.currentChallenge.patterns.map((pattern, index) => (
                         <div key={pattern.id} className="flex items-center mb-2">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center mr-2 ${
@@ -438,14 +437,7 @@ const AboutRewards = () => {
                             )}
                           </div>
                           <div className="flex-1">
-                            <div className="flex items-center">
-                              <p className="text-xs font-medium text-gray-700">{pattern.name}</p>
-                              {pattern.isComplete && (
-                                <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-1 rounded">
-                                  {pattern.multiplier}x
-                                </span>
-                              )}
-                            </div>
+                            <p className="text-xs font-medium text-gray-700">{pattern.name}</p>
                             <div className="w-full bg-gray-100 rounded-full h-1.5 mt-1">
                               <div 
                                 className={`h-1.5 rounded-full ${pattern.isComplete ? "bg-green-500" : "bg-blue-300"}`} 
@@ -460,10 +452,10 @@ const AboutRewards = () => {
                       ))}
                     </div>
                     
-                    {/* Stamps Preview - Show only first 5 stamps */}
-                    <div className="flex space-x-2 mb-2">
+                    {/* Stamps Preview - Show only first 5 stamps in horizontal scroll */}
+                    <div className="flex space-x-2 overflow-x-auto pb-1 mb-2 no-scrollbar">
                       {stampsData.currentChallenge.stamps.slice(0, 5).map(stamp => (
-                        <div key={stamp.id} className="relative">
+                        <div key={stamp.id} className="flex-shrink-0 relative">
                           {stamp.collected ? (
                             <div className={`h-8 w-8 rounded-full ${
                               stamp.type === "gift" ? "bg-green-300" : 
@@ -494,23 +486,6 @@ const AboutRewards = () => {
                       )}
                     </div>
                     
-                    {/* Latest Stamp */}
-                    {stampsData.currentChallenge.stamps.filter(s => s.collected).length > 0 && (
-                      <div className="mt-8 bg-white p-3 rounded-lg border border-gray-200">
-                        <div className="flex items-center">
-                          <div className="h-10 w-10 rounded-full bg-green-100 border-2 border-green-300 flex items-center justify-center mr-3">
-                            <div className="h-7 w-7 rounded-full bg-green-700"></div>
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800">Latest stamp collected!</p>
-                            <p className="text-xs text-gray-600">
-                              {stampsData.currentChallenge.stamps.filter(s => s.collected).pop().date} • Current streak: 3 days
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
                     {/* Next Reward Preview */}
                     <div className="mt-4 p-3 bg-white rounded-lg border border-gray-200">
                       <h5 className="text-sm font-medium text-gray-700 mb-2">Complete next pattern for:</h5>
@@ -537,7 +512,7 @@ const AboutRewards = () => {
                 
                 {/* Buddy System Promo */}
                 {buddies.length === 0 && (
-                  <div className="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
+                  <div className="mt-4 bg-yellow-50 p-4 rounded-lg border border-yellow-100">
                     <h4 className="font-medium text-yellow-800">Double Your Rewards!</h4>
                     <p className="mt-1 text-sm text-yellow-700">
                       Find a buddy and join activities together to earn <strong>2x reward points</strong>!
@@ -553,24 +528,24 @@ const AboutRewards = () => {
               </div>
 
               {/* Expiring Healthpoints */}
-              <div className="bg-white p-4 rounded-md shadow-sm">
+              <div className="bg-white p-3 rounded-md shadow-sm">
                 <div className="flex items-center">
                   <svg className="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-lg font-medium text-gray-800">No Healthpoints expiring yet</span>
+                  <span className="text-base font-medium text-gray-800">No Healthpoints expiring yet</span>
                 </div>
               </div>
 
               {/* HPB Credit$ Wallet */}
-              <div className="bg-white p-6 rounded-md shadow-sm">
+              <div className="bg-white p-4 rounded-md shadow-sm">
                 <div className="flex items-center mb-4">
                   <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center border border-gray-300 mr-2">
                     <span className="text-green-700 text-xl">$</span>
                   </div>
-                  <h2 className="text-xl font-medium text-gray-800">HPB Credit$ Wallet</h2>
+                  <h2 className="text-lg font-medium text-gray-800">HPB Credit$ Wallet</h2>
                 </div>
-                <p className="text-gray-700 mb-6">
+                <p className="text-gray-700 mb-4 text-sm">
                   Use your Credit$ to offset payments at your favourite merchants
                 </p>
                 <button 
@@ -597,7 +572,19 @@ const AboutRewards = () => {
         </div>
       </div>
 
-      <Footer />
+      {/* Add custom styles for scrollbar */}
+      <style jsx="true">{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+      
+      {/* Add space at bottom for navigation */}
+      <div className="h-16"></div>
     </div>
   );
 };
