@@ -14,8 +14,10 @@ import WhatsApp from './pages/WhatsApp';
 import Healthy365 from './pages/Healthy365';
 import Explore from './pages/Explore';
 import ElderLink from './pages/ElderLink';
-import ElderlyRewards from './pages/ElderlyRewards';
 import AboutElderLink from './pages/AboutElderLink';
+import AboutRewards from './pages/AboutRewards';
+import Buddies from './pages/Buddies';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -33,9 +35,11 @@ function App() {
                 <Route path="/whatsapp" element={<WhatsApp />} />
                 <Route path="/elderlink" element={<ElderLink />} />
                 <Route path="/about-elderlink" element={<AboutElderLink />} />
-                <Route path="/rewards" element={<ElderlyRewards />} />
+                <Route path="/about-rewards" element={<AboutRewards />} />
                 <Route path="/healthy365" element={<Navigate to="/" replace />} />
                 <Route path="/explore" element={<Explore />} />
+                <Route path="/buddies" element={<Buddies />} />
+                <Route path="/profile" element={<Profile />} />
                 {/* Add more routes as needed */}
               </Routes>
             </main>

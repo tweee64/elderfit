@@ -360,4 +360,5 @@ const events = [
   }
 ];
 
+export { events as eventsData };
 export default events;

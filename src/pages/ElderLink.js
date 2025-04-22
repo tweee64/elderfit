@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';
@@ -9,81 +9,32 @@ const ElderLink = () => {
   const [messages, setMessages] = useState([]);
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [conversationStarted] = useState(false);
+  const [conversationStarted, setConversationStarted] = useState(false);
+  const messagesEndRef = useRef(null);
   
-  // Initialize chat with welcome message only when needed
+  // Auto-scroll to bottom of messages
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+  
+  // Initialize chat with welcome message only
   useEffect(() => {
     if (!conversationStarted) {
-      // Only add the initial bot message (without user message)
+      // Initial bot message
       const initialBotMessage = {
         id: 1,
-        text: "Hey there! 👋 I'm ElderLink, your friendly event buddy. I can help you find cool events, RSVP, get directions, and more. 🎉 What would you like to know about?",
+        text: "Hello there! 👋 I'm ElderLink, your friendly event buddy. How can I assist you today?",
         sender: "bot",
-        timestamp: new Date(),
-        options: [
-          { id: 'events', text: "Find events" },
-          { id: 'whatsapp', text: "WhatsApp groups" },
-          { id: 'about', text: "About ElderLink" }
-        ],
-        showOptions: true
+        timestamp: new Date()
       };
       setMessages([initialBotMessage]);
+      setConversationStarted(true);
     }
   }, [conversationStarted]);
-  
-  // Hard-coded responses for demonstration purposes
-  const getBotResponse = (userMessage) => {
-    // Convert user message to lowercase for easier matching
-    const userText = userMessage.toLowerCase();
-    
-    if (userText.includes("hello") || userText.includes("hi")) {
-      return "Hello! How can I help you today? I can help you find events, join WhatsApp groups, or learn more about ElderLink.";
-    }
-    else if (userText.includes("find events") || userText.includes("events") || userText.includes("activities")) {
-      return "Great! I can help find events in these categories: \n\n🏋️ Physical\n🎵 🎨 Creative\n🧠 Mental\n👥 Social\n\nWhich are you most interested in?";
-    }
-    else if (userText.includes("creative") || userText.includes("art") || userText.includes("music")) {
-      return "Which location would you be interested in participating events in?\nNorth, South, East, or West?";
-    }
-    else if (userText.includes("west")) {
-      return "Here are a few events you might like:\n\n🎨 Painting at xyz Community Centre\n🧶 Beginner's Crocheting class at xyz Community Centre\n✒️ Chinese calligraphy at xyz Community Centre\n\nReply with the number (1, 2, or 3) to learn more.";
-    }
-    else if (userText === "2" || userText.includes("crocheting")) {
-      return "Beginner's Crocheting class at xyz Community Centre!\nWhat would you like to know?\n- Event Details\n- Event Location\n- Event Pricing\n- RSVP info";
-    }
-    else if (userText.includes("event details") || userText.includes("details")) {
-      return "Event Details: Beginner's Crocheting Class\n\n✨ Ready to stitch, relax, and create something cute! Join our Beginner's Crocheting Class!\n\n🧶 You'll learn:\n• How to hold a hook + yarn\n• Basic stitches (chain, single, double)\n• Start your first mini project (like a coaster or flower!)\n\n📍 Location: xyz Community Centre\n💰 Cost: $20 (includes all materials)\n👤 Skill Level: Total beginners welcome!\n☕ Bonus: Free coffee + tea bar\n\n⌚ Time: 19 Apr 2025 - 8PM\n⌚ Time: 26 Apr 2025 - 8PM\n⌚ Time: 3 May 2025 - 8PM\n⌚ Time: 10 May 2025 - 8PM";
-    }
-    else if (userText.includes("location") || userText.includes("where")) {
-      return "xyz Community Centre is at 123 Main St, Singapore, S999999 📍\n\n🗺️ Tap for directions: [Google Maps Link]";
-    }
-    else if (userText.includes("rsvp") || userText.includes("sign up") || userText.includes("join")) {
-      return "Would you like to RSVP for the Beginner's Crocheting Class? I can help you sign up and even invite friends!";
-    }
-    else if (userText.includes("yes") && messages[messages.length-1].text.includes("RSVP")) {
-      return "Would you like to invite a friend to the event?";
-    }
-    else if (userText.includes("yes") && messages[messages.length-1].text.includes("invite a friend")) {
-      return "How many people would you like to invite?";
-    }
-    else if (userText.includes("1") || userText.includes("2") || userText.includes("3") || userText.includes("one") || userText.includes("two") || userText.includes("three")) {
-      if (messages[messages.length-1].text.includes("How many")) {
-        return "Awesome, you're gonna love it 😎\nTap the link below to RSVP in the app and share this link with your friends to invite them❤️:\n\n⭐ RSVP Now";
-      }
-    }
-    else if (userText.includes("whatsapp") || userText.includes("group") || userText.includes("chat")) {
-      return "Want to chat with other people going to events like Beginner's Crocheting Class?\nI can add you to group chats for various activities!";
-    }
-    else if (userText.includes("about") || userText.includes("elderlink")) {
-      return "ElderLink is a Digital Companion Platform integrated with Healthy 365, designed to help elderly citizens stay connected, active, and healthy through a simple, accessible digital platform. Would you like to know more about our services?";
-    }
-    else if (userText.includes("thanks") || userText.includes("thank you")) {
-      return "You're welcome! Is there anything else I can help with today?";
-    }
-    else {
-      return "I'm not sure I understand. Would you like to:\n- Find events near you\n- Join a WhatsApp group chat\n- Learn more about ElderLink services";
-    }
-  };
   
   // Handle sending a new message
   const handleSendMessage = (e) => {
@@ -96,102 +47,69 @@ const ElderLink = () => {
       id: messages.length + 1,
       text: userInput,
       sender: "user",
-      timestamp: new Date(),
-      selected: true
+      timestamp: new Date()
     };
     
     setMessages(prevMessages => [...prevMessages, newUserMessage]);
     setUserInput('');
     setLoading(true);
     
+    // Determine response based on conversation flow
+    let botResponseText = "";
+    let showOptions = false;
+    let options = [];
+    
+    // Check for predefined conversation flow
+    if (messages.length === 1 && messages[0].sender === "bot" && messages[0].text.includes("How can I assist you today")) {
+      botResponseText = "Of course! I'd be happy to help. Which activity are you referring to?";
+    } 
+    else if (messages.length === 3 && userInput.toLowerCase().includes("gardening")) {
+      botResponseText = "Ah yes, the Community Gardening Workshop! It's a relaxing session where you can learn about growing herbs and vegetables. It's suitable for all levels, even if you're just starting out.";
+    }
+    else if (messages.length === 5 && userInput.toLowerCase().includes("lovely")) {
+      botResponseText = "It will take place at the Meadowbrook Community Centre, on Maple Lane. That's the same place where the craft fair was last month.";
+    }
+    else if (messages.length === 7 && userInput.toLowerCase().includes("transport")) {
+      botResponseText = "You can take Bus 52 from Main Street, and it'll drop you right in front of the centre. The stop is called Maple Lane Community Stop.";
+    }
+    else if (messages.length === 9 && userInput.toLowerCase().includes("indoors")) {
+      botResponseText = "It's partly indoors and partly outside in their little garden. The first half is a short talk inside, and then they'll guide everyone to the garden to do some planting.";
+    }
+    else if (messages.length === 11 && userInput.toLowerCase().includes("assistance")) {
+      botResponseText = "Yes! There will be volunteers and staff around the whole time, and they're more than happy to help. If you'd like, I can also reserve you a seat near the front.";
+    }
+    else if (messages.length === 13 && (userInput.toLowerCase().includes("thank") || userInput.toLowerCase().includes("wonderful"))) {
+      botResponseText = "You're very welcome! I've made a note for you. If you need help getting ready for the day or reminders, just let me know. 🌸";
+    }
+    else {
+      // Default response for any other inputs
+      botResponseText = "I'm here to help with any questions about activities and events. Is there anything specific you'd like to know?";
+    }
+    
     // Simulate typing delay before bot responds
     setTimeout(() => {
       const botResponse = {
         id: messages.length + 2,
-        text: getBotResponse(userInput),
+        text: botResponseText,
         sender: "bot",
-        timestamp: new Date()
+        timestamp: new Date(),
+        showOptions,
+        options
       };
-      
-      // Add appropriate options based on the response
-      if (botResponse.text.includes("Which are you most interested in")) {
-        botResponse.options = [
-          { id: 'physical', text: "🏋️ Physical" },
-          { id: 'creative', text: "🎵 🎨 Creative" },
-          { id: 'mental', text: "🧠 Mental" },
-          { id: 'social', text: "👥 Social" }
-        ];
-        botResponse.showOptions = true;
-      } 
-      else if (botResponse.text.includes("Which location")) {
-        botResponse.options = [
-          { id: 'north', text: "North" },
-          { id: 'south', text: "South" },
-          { id: 'east', text: "East" },
-          { id: 'west', text: "West" }
-        ];
-        botResponse.showOptions = true;
-      }
-      else if (botResponse.text.includes("Here are a few events")) {
-        botResponse.options = [
-          { id: 'option1', text: "1" },
-          { id: 'option2', text: "2" },
-          { id: 'option3', text: "3" }
-        ];
-        botResponse.showOptions = true;
-      }
-      else if (botResponse.text.includes("What would you like to know")) {
-        botResponse.options = [
-          { id: 'eventDetails', text: "Event Details" },
-          { id: 'eventLocation', text: "Event Location" },
-          { id: 'eventPricing', text: "Event Pricing" },
-          { id: 'rsvp', text: "RSVP info" }
-        ];
-        botResponse.showOptions = true;
-      }
-      else if (botResponse.text.includes("Would you like to")) {
-        botResponse.options = [
-          { id: 'yes', text: "Yes" },
-          { id: 'no', text: "No" }
-        ];
-        botResponse.showOptions = true;
-      }
-      else if (botResponse.text.includes("How many people")) {
-        botResponse.options = [
-          { id: 'one', text: "1" },
-          { id: 'two', text: "2" },
-          { id: 'three', text: "3" }
-        ];
-        botResponse.showOptions = true;
-      }
       
       setMessages(prevMessages => [...prevMessages, botResponse]);
       setLoading(false);
     }, 1000);
   };
   
-  // Function to handle clicking on available options
-  const handleOptionClick = (optionText) => {
-    // Set the clicked option as the user input and send it
-    setUserInput(optionText);
-    
-    // Use setTimeout to ensure the state update happens before form submission
-    setTimeout(() => {
-      const form = document.getElementById('message-form');
-      if (form) {
-        const event = new Event('submit', { cancelable: true });
-        form.dispatchEvent(event);
-      }
-    }, 0);
-  };
-  
-  const handleBack = () => {
-    navigate('/about-elderlink');
-  };
-  
   // Handle input change
   const handleInputChange = (e) => {
     setUserInput(e.target.value);
+  };
+  
+  // Format timestamp
+  const formatTime = (timestamp) => {
+    return new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
   
   // Render chat message bubbles
@@ -203,25 +121,15 @@ const ElderLink = () => {
         <div className={`rounded-lg py-2 px-4 max-w-[80%] shadow ${
           isBot 
             ? 'bg-white text-black border border-gray-200' 
-            : message.selected ? 'bg-green-100 text-gray-800' : 'bg-blue-500 text-white'
+            : 'bg-blue-500 text-white'
         }`}>
-          <p className={`text-sm ${getTextSizeClass()}`}>{message.text}</p>
+          {isBot && <span className="text-xs text-gray-500 mb-1">🤖 Chatbot</span>}
+          {!isBot && <span className="text-xs text-blue-300 mb-1">👵 Elderly User</span>}
+          <p className={`text-sm ${getTextSizeClass()} whitespace-pre-line`}>{message.text}</p>
           
-          {message.hasMap && (
-            <div className="mt-2 text-blue-500 underline">
-              <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="text-blue-500">Google Maps link</a>
-            </div>
-          )}
-          
-          {message.hasRSVPLink && (
-            <div className="mt-2">
-              <button className="text-blue-500 font-bold bg-transparent border-0 p-0 cursor-pointer">RSVP Now</button>
-            </div>
-          )}
-          
-          {message.hasGroupLink && (
-            <div className="mt-2">
-              <button className="text-blue-500 font-bold bg-transparent border-0 p-0 cursor-pointer">Group Chat Link</button>
+          {message.timestamp && (
+            <div className="text-xs text-gray-500 mt-1 text-right">
+              {formatTime(message.timestamp)}
             </div>
           )}
           
@@ -230,7 +138,7 @@ const ElderLink = () => {
               {message.options.map(option => (
                 <button
                   key={option.id}
-                  onClick={() => handleOptionClick(option.text)}
+                  onClick={() => setUserInput(option.text)}
                   className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded text-left text-sm transition-colors"
                 >
                   {option.text}
@@ -243,16 +151,130 @@ const ElderLink = () => {
     );
   };
 
+  // Function to set predefined conversation for demo purposes
+
+  // eslint-disable-next-line 
+  const loadPresetConversation = () => {
+    const presetConversation = [
+      {
+        id: 1,
+        text: "Hello there! 👋 I'm ElderLink, your friendly event buddy. How can I assist you today?",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 10)
+      },
+      {
+        id: 2,
+        text: "Hello dear, I saw there's an activity listed for next week. Could you tell me a bit more about it?",
+        sender: "user",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 9)
+      },
+      {
+        id: 3,
+        text: "Of course! I'd be happy to help. Which activity are you referring to?",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 8)
+      },
+      {
+        id: 4,
+        text: "I think it was something about a gardening workshop. It sounded nice.",
+        sender: "user",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 7)
+      },
+      {
+        id: 5,
+        text: "Ah yes, the Community Gardening Workshop! It's a relaxing session where you can learn about growing herbs and vegetables. It's suitable for all levels, even if you're just starting out.",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 6)
+      },
+      {
+        id: 6,
+        text: "That sounds lovely. Where will it be held?",
+        sender: "user",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 5)
+      },
+      {
+        id: 7,
+        text: "It will take place at the Meadowbrook Community Centre, on Maple Lane. That's the same place where the craft fair was last month.",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 4)
+      },
+      {
+        id: 8,
+        text: "Oh, I remember that place. How would I get there by public transport?",
+        sender: "user",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 3)
+      },
+      {
+        id: 9,
+        text: "You can take Bus 52 from Main Street, and it'll drop you right in front of the centre. The stop is called Maple Lane Community Stop.",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 2)
+      },
+      {
+        id: 10,
+        text: "Perfect. And what type of activity is this? Is it indoors?",
+        sender: "user",
+        timestamp: new Date(new Date().getTime() - 1000 * 60 * 1)
+      },
+      {
+        id: 11,
+        text: "It's partly indoors and partly outside in their little garden. The first half is a short talk inside, and then they'll guide everyone to the garden to do some planting.",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 50)
+      },
+      {
+        id: 12,
+        text: "That sounds just right for me. Will there be someone to help if I need assistance?",
+        sender: "user",
+        timestamp: new Date(new Date().getTime() - 1000 * 40)
+      },
+      {
+        id: 13,
+        text: "Yes! There will be volunteers and staff around the whole time, and they're more than happy to help. If you'd like, I can also reserve you a seat near the front.",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 30)
+      },
+      {
+        id: 14,
+        text: "Yes, please. That would be wonderful. Thank you so much!",
+        sender: "user",
+        timestamp: new Date(new Date().getTime() - 1000 * 20)
+      },
+      {
+        id: 15,
+        text: "You're very welcome! I've made a note for you. If you need help getting ready for the day or reminders, just let me know. 🌸",
+        sender: "bot",
+        timestamp: new Date(new Date().getTime() - 1000 * 10)
+      }
+    ];
+    
+    setMessages(presetConversation);
+    scrollToBottom();
+  };
+
+  // Load preset conversation for demo purposes
+  useEffect(() => {
+    if (conversationStarted) {
+      loadPresetConversation();
+    }
+// eslint-disable-next-line
+  }, [conversationStarted]);
+
   return (
     <div className="max-w-md mx-auto bg-gray-100 min-h-screen pb-16">
-      {/* Header - Light background with ElderLink title */}
-      <div className="bg-yellow-400 px-4 py-3 text-gray-800 sticky top-0 z-10 shadow-md">
+      {/* Header */}
+      <div className="bg-blue-500 text-white p-6 text-center">
         <div className="flex items-center justify-between">
-          <button onClick={handleBack} className="text-2xl">
-            &lt;
+          <button 
+            onClick={() => navigate(-1)}
+            className="absolute left-4"
+            aria-label="Go back"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
           </button>
-          <h1 className={`text-xl font-bold ${getTextSizeClass()}`}>ElderLink</h1>
-          <div className="text-xl">⋮</div>
+          <h1 className={`text-2xl font-bold ${getTextSizeClass()} mx-auto`}>ElderLink</h1>
         </div>
       </div>
       
@@ -272,9 +294,12 @@ const ElderLink = () => {
             </div>
           </div>
         )}
+        
+        {/* Empty div for auto-scroll reference */}
+        <div ref={messagesEndRef} />
       </div>
       
-      {/* Message input - now functional */}
+      {/* Message input */}
       <form 
         id="message-form"
         onSubmit={handleSendMessage} 

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useUser } from '../contexts/UserContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';
-// import events from '../data/events'; // Import the events data
+import { eventsData } from '../data/events'; // Import the events data
+import { useAccessibility } from '../contexts/AccessibilityContext';
 
 const Events = () => {
   const navigate = useNavigate();
-  // const { getTextSizeClass } = useAccessibility();
   const { savedEvents, saveEvent, removeEvent } = useUser();
+    const { getTextSizeClass,  } = useAccessibility();
   
   // State for filters
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,148 +23,115 @@ const Events = () => {
     ageGroup: [], // Age ranges
     intensity: [], // Added intensity array
     virtual: null, // Added virtual property
-    program: [] // Added program array
+    program: [], // Added program array
+    activityType: [] // Activity types like 'physical', 'art', etc.
   });
   
+  // Let's add activity types for filtering
+  const activityTypes = [
+    { id: 'physical', name: 'Physical', emoji: '🏋️' },
+    { id: 'art', name: 'Art & Craft', emoji: '🎨' },
+    { id: 'dance', name: 'Dance', emoji: '💃' },
+    { id: 'yoga', name: 'Yoga/Meditation', emoji: '🧘' },
+    { id: 'mental', name: 'Mental Wellness', emoji: '🧠' },
+    { id: 'social', name: 'Social', emoji: '👥' }
+  ];
+  
+  // Function to determine activity type based on event title and description
+  const getEventActivityType = (event) => {
+    const title = event.title.toLowerCase();
+    const description = event.description ? event.description.toLowerCase() : '';
+    
+    // Return activity type or array of types
+    if (event.activityType) {
+      return event.activityType;
+    }
+    
+    // Auto-categorize based on keywords in title or description
+    if (title.includes('yoga') || title.includes('meditation') || 
+        description.includes('yoga') || description.includes('meditation')) {
+      return 'yoga';
+    } else if (title.includes('tai chi') || title.includes('fitness') || 
+               title.includes('workout') || title.includes('exercise') || 
+               title.includes('getfit') || title.includes('hiit') ||
+               description.includes('fitness') || description.includes('strength')) {
+      return 'physical';
+    } else if (title.includes('dance') || title.includes('zumba') || 
+               description.includes('dance') || description.includes('choreography')) {
+      return 'dance';
+    } else if (title.includes('art') || title.includes('craft') || title.includes('painting') ||
+               title.includes('drawing') || title.includes('crocheting') || 
+               description.includes('art') || description.includes('creative')) {
+      return 'art';
+    } else if (title.includes('mental') || title.includes('mindfulness') || 
+               title.includes('wellness') || title.includes('health') ||
+               description.includes('mental') || description.includes('mindfulness')) {
+      return 'mental';
+    } else if (title.includes('social') || title.includes('group') || 
+               title.includes('community') || title.includes('gathering') ||
+               description.includes('together') || description.includes('community')) {
+      return 'social';
+    }
+    
+    // Default to physical if no match found
+    return 'physical';
+  };
+
   // Current date for dynamic date labels
   // const currentDate = new Date();
   const days = ['Today', 'Tomorrow', 'Wed, Apr 23', 'Thu, Apr 24', 'Fri, Apr 25'];
   
-  // Sample events data - now integrating with events.js data
-  const allEvents = {
-    Today: [
-      {
-        id: 1,
-        timeStart: '11.45am',
-        timeEnd: '12.45pm',
-        program: 'Sunrise In The City (SITC)',
-        title: 'GetFit @ ImpactFit',
-        location: 'JURONG WEST, SJ Campus - Impact Fit',
-        slots: 5,
-        intensity: 1, // 1-3 scale
-        virtual: false,
-        recommended: true,
-        date: 'Monday 21 Apr',
-        directions: 'After enter from main entrance, proceed along the main corridor, after the foodcourt on your right hand side, lookout for the gym on your right.',
-        description: 'GetFit Programme aim to cultivate a movement towards personal responsibility in Fitness and Wellness. Within each session, a series of strength and mobility enhancing exercises will be conducted to promote physical fitness, while participants will also gain insights on exercise programming and the pillars of movement.',
-        note: 'We kindly request registered participants to arrive on time. Latecomers and walk-ins will be admitted if capacity allows.',
-        organiser: 'SJD & TRUE Group',
-        phone: '87498775',
-        email: 'sjd.hpb23@gmail.com',
-      },
-      {
-        id: 104,
-        timeStart: '12pm',
-        timeEnd: '1pm',
-        program: 'Healthy Workplace Ecosystem (HWE)',
-        title: 'Dance Remix',
-        location: 'Zoom, Virtual Event',
-        virtual: true,
-        intensity: 1,
-        recommended: false
-      },
-      {
-        id: 3,
-        timeStart: '12pm',
-        timeEnd: '12.45pm',
-        program: 'Healthy Workplace Ecosystem (HWE)',
-        title: 'Gentle Yoga',
-        location: 'BOON KENG, 80 Bendemeer Road - #09-01',
-        virtual: false,
-        intensity: 1,
-        recommended: true
-      },
-      {
-        id: 4,
-        timeStart: '12pm',
-        timeEnd: '1pm',
-        program: 'Healthy Workplace Ecosystem (HWE)',
-        title: 'Work Great - Dance Remix',
-        location: 'Zoom, Virtual Event',
-        virtual: true,
-        intensity: 1,
-        recommended: false
-      },
-      {
-        id: 5,
-        timeStart: '12.30pm',
-        timeEnd: '1.30pm',
-        program: 'Sunrise In The City (SITC)',
-        title: 'Back, Neck & Shoulder (Platinum Yoga @ Westgate)',
-        location: 'WESTGATE, 3 Gateway Drive',
-        virtual: false,
-        intensity: 2,
-        recommended: true
+  // Organize events by day from the eventsData imported from events.js
+  const organizeEventsByDay = () => {
+    const today = new Date('2025-04-21'); // Setting a fixed date for demo purposes
+    
+    const result = {
+      Today: [],
+      Tomorrow: [],
+      'Wed, Apr 23': [],
+      'Thu, Apr 24': [],
+      'Fri, Apr 25': []
+    };
+    
+    eventsData.forEach(event => {
+      const eventDate = event.schedule?.startDate ? new Date(event.schedule.startDate) : new Date();
+      const dayDiff = Math.floor((eventDate - today) / (1000 * 60 * 60 * 24));
+      
+      // Format time from schedule
+      const timeStart = event.schedule?.time?.split(' - ')[0] || '';
+      const timeEnd = event.schedule?.time?.split(' - ')[1] || '';
+      
+      const formattedEvent = {
+        ...event,
+        timeStart: timeStart,
+        timeEnd: timeEnd,
+        slots: event.maxParticipants ? (event.maxParticipants - event.currentParticipants) : event.slots,
+        recommended: event.recommended !== undefined ? event.recommended : (event.id % 2 === 0),
+        date: event.schedule?.startDate ? new Date(event.schedule.startDate).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' }) : '',
+        // Add buddy-friendly flag for certain events (odd-numbered IDs in this demo)
+        buddyFriendly: event.buddyFriendly !== undefined ? event.buddyFriendly : [1, 3, 5, 7, 9].includes(event.id),
+        // Base reward points (doubled when attending with buddy)
+        rewardPoints: event.rewardPoints || 100
+      };
+      
+      if (dayDiff === 0) {
+        result.Today.push(formattedEvent);
+      } else if (dayDiff === 1) {
+        result.Tomorrow.push(formattedEvent);
+      } else if (dayDiff === 2) {
+        result['Wed, Apr 23'].push(formattedEvent);
+      } else if (dayDiff === 3) {
+        result['Thu, Apr 24'].push(formattedEvent);
+      } else if (dayDiff === 4) {
+        result['Fri, Apr 25'].push(formattedEvent);
       }
-    ],
-    Tomorrow: [
-      {
-        id: 6,
-        timeStart: '9am',
-        timeEnd: '10am',
-        program: 'Sunrise In The City (SITC)',
-        title: 'Morning Tai Chi',
-        location: 'MARINE PARADE, Community Center',
-        slots: 3,
-        intensity: 1,
-        virtual: false,
-        recommended: true
-      },
-      {
-        id: 7,
-        timeStart: '11am',
-        timeEnd: '12pm',
-        program: 'Healthy Workplace Ecosystem (HWE)',
-        title: 'Senior Fitness',
-        location: 'TAMPINES, Tampines Hub',
-        slots: 2,
-        intensity: 2,
-        virtual: false,
-        recommended: true
-      }
-    ],
-    'Wed, Apr 23': [
-      {
-        id: 8,
-        timeStart: '3pm',
-        timeEnd: '4pm',
-        program: 'Active Health',
-        title: 'Pilates for Beginners',
-        location: 'Zoom, Virtual Event',
-        virtual: true,
-        intensity: 2,
-        recommended: false
-      }
-    ],
-    'Thu, Apr 24': [
-      {
-        id: 9,
-        timeStart: '5pm',
-        timeEnd: '6pm',
-        program: 'Sunrise In The City (SITC)',
-        title: 'Evening Stretch',
-        location: 'CLEMENTI, Clementi Mall',
-        slots: 8,
-        intensity: 1,
-        virtual: false,
-        recommended: false
-      }
-    ],
-    'Fri, Apr 25': [
-      {
-        id: 10,
-        timeStart: '4.30pm',
-        timeEnd: '5.30pm',
-        program: 'Active Health',
-        title: 'HIIT Workout',
-        location: 'PUNGGOL, Waterway Point',
-        slots: 4,
-        intensity: 3,
-        virtual: false,
-        recommended: true
-      }
-    ]
+    });
+    
+    return result;
   };
+  
+  // Use the organized events
+  const allEvents = organizeEventsByDay();
   
   // Filter events based on search term, active tab, and filters
   const getFilteredEvents = () => {
@@ -180,8 +147,12 @@ const Events = () => {
       if (searchTerm.trim() !== '') {
         const searchLower = searchTerm.toLowerCase();
         const titleMatch = event.title.toLowerCase().includes(searchLower);
-        const locationMatch = event.location.toLowerCase().includes(searchLower);
-        const programMatch = event.program.toLowerCase().includes(searchLower);
+        const locationMatch = typeof event.location === 'string' 
+          ? event.location.toLowerCase().includes(searchLower)
+          : event.location?.name?.toLowerCase().includes(searchLower) || false;
+        const programMatch = event.program 
+          ? event.program.toLowerCase().includes(searchLower)
+          : false;
         
         if (!(titleMatch || locationMatch || programMatch)) {
           return false;
@@ -191,7 +162,11 @@ const Events = () => {
       // Filter by location
       if (filters.location.trim() !== '') {
         const locationLower = filters.location.toLowerCase();
-        if (!event.location.toLowerCase().includes(locationLower)) {
+        const locationStr = typeof event.location === 'string' 
+          ? event.location.toLowerCase()
+          : (event.location?.name || '').toLowerCase();
+        
+        if (!locationStr.includes(locationLower)) {
           return false;
         }
       }
@@ -246,46 +221,28 @@ const Events = () => {
         }
       }
       
+      // Filter by activity type
+      if (filters.activityType.length > 0) {
+        const eventType = getEventActivityType(event);
+        // If the event has a specific activityType or we can determine it
+        if (eventType) {
+          // Handle both array and string types
+          const eventTypes = Array.isArray(eventType) ? eventType : [eventType];
+          // Check if there's an overlap between selected activity types and event types
+          const hasMatchingType = filters.activityType.some(type => 
+            eventTypes.includes(type)
+          );
+          if (!hasMatchingType) {
+            return false;
+          }
+        }
+      }
+      
       // Keep events that passed all filters
       return true;
     });
   };
   
-  // Get all available programs for filter dropdown
-  // const getAllPrograms = () => {
-  //   const programs = new Set();
-  //   Object.values(allEvents).flat().forEach(event => {
-  //     programs.add(event.program);
-  //   });
-  //   return Array.from(programs);
-  // };
-  
-  // Handle going back
-  const handleBack = () => {
-    navigate('/explore');
-  };
-  
-  // Toggle filter selection
-  // const toggleFilter = (type, value) => {
-  //   setFilters(prev => {
-  //     if (type === 'intensity') {
-  //       if (prev.intensity.includes(value)) {
-  //         return { ...prev, intensity: prev.intensity.filter(i => i !== value) };
-  //       } else {
-  //         return { ...prev, intensity: [...prev.intensity, value] };
-  //       }
-  //     } else if (type === 'virtual') {
-  //       return { ...prev, virtual: prev.virtual === value ? null : value };
-  //     } else if (type === 'program') {
-  //       if (prev.program.includes(value)) {
-  //         return { ...prev, program: prev.program.filter(p => p !== value) };
-  //       } else {
-  //         return { ...prev, program: [...prev.program, value] };
-  //       }
-  //     }
-  //     return prev;
-  //   });
-  // };
   
   // Reset all filters
   const resetFilters = () => {
@@ -294,7 +251,11 @@ const Events = () => {
       eventDate: '',
       eventTime: '',
       eventMode: [],
-      ageGroup: []
+      ageGroup: [],
+      intensity: [],
+      virtual: null,
+      program: [],
+      activityType: []
     });
   };
   
@@ -302,20 +263,6 @@ const Events = () => {
   const hasActiveFilters = () => {
     return filters.intensity.length > 0 || filters.virtual !== null || filters.program.length > 0;
   };
-
-  // Get intensity display based on level (1-3)
-  // const getIntensityDisplay = (level) => {
-  //   return (
-  //     <div className="flex items-center">
-  //       <span className="text-gray-600 mr-2 text-sm">Intensity:</span>
-  //       <div className="flex space-x-1">
-  //         <div className={`h-2 w-4 rounded ${level >= 1 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
-  //         <div className={`h-2 w-4 rounded ${level >= 2 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
-  //         <div className={`h-2 w-4 rounded ${level >= 3 ? 'bg-gray-500' : 'bg-gray-200'}`}></div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
 
   // Handle event click to navigate to detail page
   const handleEventClick = (eventId) => {
@@ -357,7 +304,9 @@ const Events = () => {
           
           <div className="mt-3 flex justify-between items-center">
             <p className="text-gray-600 text-sm">
-              {event.location?.name || event.location || 'Location not specified'}
+              {typeof event.location === 'string' 
+                ? event.location 
+                : (event.location?.name || 'Location not specified')}
             </p>
             {/* Display slots left for all events */}
             <span className="bg-yellow-400 text-xs font-bold px-2 py-1 rounded-full">
@@ -366,6 +315,23 @@ const Events = () => {
                `${event.maxParticipants - event.currentParticipants} SLOTS` : 
                "OPEN"}
             </span>
+          </div>
+          
+          {/* Points and Buddy Indicator */}
+          <div className="mt-2 flex justify-between items-center">
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span className="text-sm font-medium">{event.rewardPoints} pts</span>
+            </div>
+            
+            {event.buddyFriendly && (
+              <div className="flex items-center text-xs bg-yellow-50 border border-yellow-100 rounded-full px-2 py-1">
+                <span className="mr-1">👥</span>
+                <span className="font-medium text-yellow-800">2x points with buddy!</span>
+              </div>
+            )}
           </div>
           
           {event.intensity && (
@@ -385,50 +351,46 @@ const Events = () => {
 
   return (
     <div className="max-w-md mx-auto min-h-screen bg-gray-50">
-      {/* Header - Yellow background */}
-      <div className="bg-yellow-400 px-4 py-6">
-        <div className="flex items-center justify-between">
-          <button onClick={handleBack} className="text-2xl">
-            &lt;
-          </button>
-          <h1 className="text-2xl font-bold">Events</h1>
-          <div className="w-5"></div> {/* Empty div for alignment */}
+      {/* Update header to match consistent style across app */}
+      <div className="bg-blue-500 text-white px-4 py-4 flex items-center justify-between shadow-md">
+      <div className="bg-blue-500 text-white p-6 text-center">
+        <h1 className={`text-2xl font-bold ${getTextSizeClass()}`}>Events</h1>
+      </div>
+      </div>
+      
+      {/* Search Bar and Filter */}
+      <div className="flex mt-4 gap-2 px-4">
+        <div className="bg-white rounded-lg shadow flex-grow flex items-center px-3 py-2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search by event or location"
+            className="bg-transparent border-none flex-grow focus:outline-none text-sm"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button 
+              onClick={() => setSearchTerm('')}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
-        
-        {/* Search Bar and Filter */}
-        <div className="flex mt-4 gap-2">
-          <div className="bg-white rounded-lg shadow flex-grow flex items-center px-3 py-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search by event or location"
-              className="bg-transparent border-none flex-grow focus:outline-none text-sm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            {searchTerm && (
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            )}
-          </div>
-          <button 
-            className={`${hasActiveFilters() ? 'bg-green-500 text-white' : 'bg-white text-gray-800'} rounded-lg shadow px-6 py-2 flex items-center`}
-            onClick={() => setShowFilterModal(true)}
-          >
-            <span className="font-medium">Filter</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-            </svg>
-          </button>
-        </div>
+        <button 
+          className={`${hasActiveFilters() ? 'bg-green-500 text-white' : 'bg-white text-gray-800'} rounded-lg shadow px-6 py-2 flex items-center`}
+          onClick={() => setShowFilterModal(true)}
+        >
+          <span className="font-medium">Filter</span>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+        </button>
       </div>
       
       {/* Days Tabs - Updated with no-scrollbar class */}
@@ -674,6 +636,35 @@ const Events = () => {
                     }}
                   />
                 </div>
+              </div>
+            </div>
+
+            {/* Activity Type Filter - New Section */}
+            <div className="mb-6">
+              <div className="flex items-center mb-2">
+                <div className="w-5 h-5 text-green-500 mr-2">🏋️</div>
+                <h4 className="font-bold text-xl">Activity Type</h4>
+              </div>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                {activityTypes.map(type => (
+                  <div 
+                    key={type.id}
+                    className={`flex items-center p-3 rounded-lg border cursor-pointer ${
+                      filters.activityType.includes(type.id) 
+                        ? 'bg-green-100 border-green-500' 
+                        : 'bg-white border-gray-300'
+                    }`}
+                    onClick={() => {
+                      const updatedTypes = filters.activityType.includes(type.id)
+                        ? filters.activityType.filter(t => t !== type.id)
+                        : [...filters.activityType, type.id];
+                      setFilters({...filters, activityType: updatedTypes});
+                    }}
+                  >
+                    <span className="mr-2 text-xl">{type.emoji}</span>
+                    <span className="text-sm font-medium">{type.name}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ const Healthy365 = () => {
   // const [ setActiveTab] = useState('home');
   const [syncing, setSyncing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState('Updated today, 9:27 AM');
-  const [healthPoints, setHealthPoints] = useState(2150);
+  const [healthPoints, setHealthPoints] = useState(1080);
   const [rewards] = useState(4);
   const [steps, setSteps] = useState({current: 5375, goal: 10000});
   const [mvpa, setMvpa] = useState({current: 17, goal: 30});

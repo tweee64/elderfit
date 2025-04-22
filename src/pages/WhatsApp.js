@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useUser } from '../contexts/UserContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';
+import Header from '../components/common/Header';
 
 const WhatsApp = () => {
   const { getTextSizeClass, getColorScheme } = useAccessibility();
   const { whatsappConnected, connectWhatsapp, disconnectWhatsapp } = useUser();
   const colorScheme = getColorScheme();
+  const navigate = useNavigate();
   
   // State for phone number input
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -76,13 +79,15 @@ const WhatsApp = () => {
   
   return (
     <div className={`${colorScheme.bg} min-h-screen`}>
-      <section className="py-8">
+      {/* Add consistent Header component */}
+      <Header 
+        title="WhatsApp" 
+        showBack={true}
+      />
+      
+      <section className="py-4">
         <div className="container mx-auto px-4">
-          <h1 className={`${colorScheme.text} text-3xl font-bold mb-4 ${getTextSizeClass()}`}>
-            WhatsApp Announcements
-          </h1>
-          
-          <p className={`${colorScheme.text} text-xl mb-8 ${getTextSizeClass()}`}>
+          <p className={`${colorScheme.text} text-xl mb-6 ${getTextSizeClass()}`}>
             Get activity updates and communicate with your groups through WhatsApp.
           </p>
           
