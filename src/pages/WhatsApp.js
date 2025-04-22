@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAccessibility } from '../contexts/AccessibilityContext';
 import { useUser } from '../contexts/UserContext';
 import Healthy365Nav from '../components/common/Healthy365Nav';
@@ -9,7 +8,6 @@ const WhatsApp = () => {
   const { getTextSizeClass, getColorScheme } = useAccessibility();
   const { whatsappConnected, connectWhatsapp, disconnectWhatsapp } = useUser();
   const colorScheme = getColorScheme();
-  const navigate = useNavigate();
   
   // State for phone number input
   const [phoneNumber, setPhoneNumber] = useState('');
