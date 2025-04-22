@@ -44,7 +44,9 @@ const EventDetail = () => {
       const enhancedEvent = {
         ...foundEvent,
         buddyFriendly: foundEvent.buddyFriendly !== undefined ? foundEvent.buddyFriendly : [1, 3, 5, 7, 9].includes(foundEvent.id),
-        rewardPoints: foundEvent.rewardPoints || 100
+        rewardPoints: foundEvent.rewardPoints || 100,
+        // Use specific local images for certain events
+        image: foundEvent.id === 3 ? '/images/karaoke-social.jpg' : foundEvent.imageUrl || 'https://via.placeholder.com/400x200'
       };
       setEvent(enhancedEvent);
     }
@@ -283,30 +285,6 @@ const EventDetail = () => {
           alt={event.title} 
           className="w-full h-64 object-cover"
         />
-        <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center">
-          <button 
-            onClick={handleBack}
-            className="w-10 h-10 rounded-full bg-white bg-opacity-80 flex items-center justify-center text-gray-800 shadow-md hover:bg-opacity-100 transition-all"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button 
-            onClick={toggleSaved}
-            className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow"
-          >
-            {isSaved ? (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            )}
-          </button>
-        </div>
         
         {/* Category Badge */}
         {event.category && (
@@ -332,6 +310,39 @@ const EventDetail = () => {
             <span className="mr-1">👥</span> Buddy Friendly
           </div>
         )}
+      </div>
+      
+      {/* Navigation and Save Actions - Moved out of the image */}
+      <div className="flex justify-between items-center bg-white px-4 py-2 border-b border-gray-100">
+        <button 
+          onClick={handleBack}
+          className="flex items-center text-gray-600"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+          <span>Back</span>
+        </button>
+        <button 
+          onClick={toggleSaved}
+          className="flex items-center text-gray-600"
+        >
+          {isSaved ? (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+              </svg>
+              <span>Saved</span>
+            </>
+          ) : (
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              <span>Save</span>
+            </>
+          )}
+        </button>
       </div>
       
       {/* Event Details */}
